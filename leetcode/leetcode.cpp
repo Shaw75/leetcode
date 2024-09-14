@@ -53,19 +53,3 @@ public:
         return result;
     }
 };
-//解法2
-class Solution {
-public:
-    string removeStars(string s) {
-        string st;
-        for (char c : s) {
-            if (c == '*') {
-                st.pop_back();
-            }
-            else {
-                st += c;
-            }
-        }
-        return st;
-    }
-};
