@@ -27,7 +27,6 @@ public:
         int len = s.length();
         std::deque<char> dq;
         std::string result;
-        result.p
         int i = 0;
         while(i<len){
             if (s[i] != '*') {
