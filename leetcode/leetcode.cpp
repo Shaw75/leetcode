@@ -27,6 +27,7 @@ public:
         int len = s.length();
         std::deque<char> dq;
         std::string result;
+        result.p
         int i = 0;
         while(i<len){
             if (s[i] != '*') {
@@ -51,5 +52,21 @@ public:
             
         }
         return result;
+    }
+};
+//解法2
+class Solution {
+public:
+    string removeStars(string s) {
+        string st;
+        for (char c : s) {
+            if (c == '*') {
+                st.pop_back();
+            }
+            else {
+                st += c;
+            }
+        }
+        return st;
     }
 };
