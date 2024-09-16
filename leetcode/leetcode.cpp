@@ -2,6 +2,8 @@
 #include <deque>
 #include <vector>
 #include <numeric>
+#include <unordered_map>
+#include <queue>
 using namespace std;
 /*
 2390. 从字符串中移除星号
@@ -160,5 +162,61 @@ public:
         int rigth = num - left;
         return left > rigth ? rigth : left;
         
+    }
+};
+
+/*815. 公交路线
+给你一个数组 routes ，表示一系列公交线路，其中每个 routes[i] 表示一条公交线路，第 i 辆公交车将会在上面循环行驶。
+
+例如，路线 routes[0] = [1, 5, 7] 表示第 0 辆公交车会一直按序列 1 -> 5 -> 7 -> 1 -> 5 -> 7 -> 1 -> ... 这样的车站路线行驶。
+现在从 source 车站出发（初始时不在公交车上），要前往 target 车站。 期间仅可乘坐公交车。
+
+求出 最少乘坐的公交车数量 。如果不可能到达终点车站，返回 - 1 。
+
+*/
+
+class Solution {
+public:
+    int numBusesToDestination(vector<vector<int>>& routes, int source, int target) {
+        if (source == target) return 0;
+        int n = routes.size();//记录公交线总数
+        vector<vector<int>> edge(n, vector<int>(n));//建立临接矩阵，记录路线
+        unordered_map<int, vector<int>> rec;//key是站点，value是能到站点的公交路线
+
+        for (int i = 0; i < n; i++) {
+            for (int site : routes[i]) {    //取出每条路线经过的站点
+                for (int j : rec[site]) {//取出这个站点能到达的所以公交路线
+                    edge[i][j] = edge[j][i] = true; //记录两条路线相连接
+
+                }
+                rec[site].push_back(i);
+            }
+        }
+        vector<int> dis(n, -1);//每条公交路线到起点车站的距离
+        queue<int> que;
+        for (int bus : rec[source]) {
+            dis[bus] = 1;  //与起点在同一条公交线上的点，到起点距离都是1，因为路线是循环的
+            que.push(bus);
+        }
+        while (!que.empty()) {
+            int x = que.front(); //对头出队
+            que.pop();
+            for (int y = 0; y < n; y++) {
+                if (dis[y] == -1 && edge[x][y]) {
+                    dis[y] = dis[x] + 1;
+                    que.push(y);
+                }
+
+            }
+
+        }
+        int ret = INT_MAX;
+        //取出能到终点的所有公交路线
+        for (int bus : rec[target]) {
+            if (dis[bus] != -1) {
+                ret = min(ret, dis[bus]);
+            }
+        }
+        return ret == INT_MAX ? -1 : ret;
     }
 };
