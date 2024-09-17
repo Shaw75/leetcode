@@ -220,3 +220,51 @@ public:
         return ret == INT_MAX ? -1 : ret;
     }
 };
+
+
+
+/*
+
+2332. 坐上公交的最晚时间
+已解答
+中等
+相关标签
+相关企业
+提示
+给你一个下标从 0 开始长度为 n 的整数数组 buses ，其中 buses[i] 表示第 i 辆公交车的出发时间。同时给你一个下标从 0 开始长度为 m 的整数数组 passengers ，其中 passengers[j] 表示第 j 位乘客的到达时间。所有公交车出发的时间互不相同，所有乘客到达的时间也互不相同。
+
+给你一个整数 capacity ，表示每辆公交车 最多 能容纳的乘客数目。
+
+每位乘客都会搭乘下一辆有座位的公交车。如果你在 y 时刻到达，公交在 x 时刻出发，满足 y <= x  且公交没有满，那么你可以搭乘这一辆公交。最早 到达的乘客优先上车。
+
+返回你可以搭乘公交车的最晚到达公交站时间。你 不能 跟别的乘客同时刻到达。
+
+注意：数组 buses 和 passengers 不一定是有序的。
+
+*/
+class Solution {
+public:
+    int latestTimeCatchTheBus(vector<int>& buses, vector<int>& passengers, int capacity) {
+        sort(buses.begin(), buses.end());
+        sort(passengers.begin(), passengers.end());
+        int pos = 0;  //乘客索引
+        int space = 0;//容量
+        for (int arrive : buses) {
+            space = capacity;
+            while (space > 0 && pos < passengers.size() && passengers[pos] <= arrive) {
+                space--;
+                pos++;
+            }
+        }
+
+        pos--;
+        int lastCatchTime = space > 0 ? buses.back() : passengers[pos]; //判断最后一辆公交车是否还有容量
+        int lastCatchTime = buses.back();
+        while (pos >= 0 && passengers[pos] == lastCatchTime) {
+            pos--;
+            lastCatchTime--;
+        }
+
+        return lastCatchTime;
+    }
+};
