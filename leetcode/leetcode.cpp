@@ -377,15 +377,18 @@ public:
 class Solution {
 public:
     int findJudge(int n, vector<vector<int>>& trust) {
-        std::unordered_set<int> set;
-        int size = trust.size();
-        for (int i = 1; i < size; i++) {
-            if (trust[i - 1][0] != trust[i][0]) {
-
-
-            }
-
+        vector<int> in(n + 1);
+        vector<int> out(n + 1);
+        for (auto& edge : trust) {
+            int x = edge[0], y = edge[1];
+            in[y]++;
+            out[x]++;
         }
-        return trust[0][1];
+        for (int i = 1; i <= n; ++i) {
+            if (in[i] == n - 1 && out[i] == 0) {
+                return i;
+            }
+        }
+
     }
 };
